@@ -1,0 +1,1 @@
+# Sistema de Uploud e Gestão de Imagens :umbrella:
