@@ -54,18 +54,46 @@ export async function updateImagem(descricao, id_imagem) {
     }
 }
 
-export async function deletarImagem(descricao, id_imagem) {
-    console.log('ImagemModel :: deletarImagem')
+export async function deletarImagem(id_imagem) {
+    console.log('ImagemModel :: deletarImagem');
     const conexao = mysql.createPoll(db);
+    const sqlImagem = 'SELECT * FROM imagens WHERE id_imagem=?'
     const sql = 'DELETE FROM imagens WHERE id_imagem = ?';
     const params = [id_imagem];
 
     try {
+        const [imagem] = await conexao.query(sqlImagem, params);
+        if (imagem.length > 0) {
+            const nomeImg = imagem[0].caminho;
+            await conexao.query(sql, params);
+            await fs.unlink(path.join(__dirname, '..', '..', 'public', 'img', nomeImg));
+        }
         const [retorno] = await conexao.query(sql, params);
         if (retorno.affectedRows < 1) {
             return [404, { message: 'Imagem não encontrada' }];
         }
         return [200, { message: 'Imagem deletada' }];
+
+    } catch (error) {
+        console.log(error);
+        return [500, error];
+    }
+}
+
+export async function showOneImage(id_imagem) {
+    console.log('ImagemModel :: showOneImage');
+    const conexao = mysql.createPool(db);
+    const sql = 'SELECT * FROM imagens WHERE id_imagem=?'
+    const params = [id_imagem];
+
+    try {
+        const [retorno] = await conexao.query(sql, params);
+
+        if (retorno.length < 1) {
+            return [404, { message: 'Imagem não encontrada' }];
+        }
+        return [200, retorno[0]];
+
     } catch (error) {
         console.log(error);
         return [500, error];
