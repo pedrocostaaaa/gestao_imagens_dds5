@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 function TelaLogin() {
     const [login, setLogin] = useState('');
@@ -6,7 +6,6 @@ function TelaLogin() {
 
     async function efetuarLogin() {
         const dadosLogin = { login, senha };
-
         try {
             const resposta = await fetch('http://localhost:5000/login', {
                 method: 'POST',
@@ -26,10 +25,11 @@ function TelaLogin() {
             console.log(error);
         }
     }
+
     return (
         <div className='container d-flex justify-content-center'>
             <div className='com-md-3 mt-5'>
-                <h1>Tela de Login</h1>
+                <h1>Tela de login</h1>
                 <label htmlFor="">Login</label>
                 <input
                     className='form-control'
@@ -50,7 +50,7 @@ function TelaLogin() {
                     <button
                         className='btn btn-primary mt-3'
                         onClick={efetuarLogin}
-                    >Logar</button>
+                    >logar</button>
                 </div>
             </div>
         </div>
